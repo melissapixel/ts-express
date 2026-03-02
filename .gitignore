@@ -1,0 +1,9 @@
+# SECRET
+.env
+.dockerignore
+
+# for production
+dist
+
+# node
+node_modules
