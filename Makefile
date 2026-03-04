@@ -39,6 +39,12 @@ help:
 	@echo "  make clean     - Очистить сборку и node_modules"
 	@echo "  make lint      - Проверить код линтером"
 	@echo "  make test      - Запустить тесты"
+	@echo ""
+	@echo "$(BLUE)🗄️ База данных и миграции:$(NC)"
+	@echo "  make db-migrate file=...  - Применить конкретную миграцию"
+	@echo "  make db-seed file=...     - Применить конкретный сид"
+	@echo "  make db-seed-all          - Применить все сиды"
+	@echo "  make db-seed-status       - Проверить статус сидов"
 
 # Установка зависимостей
 install:
@@ -113,9 +119,26 @@ shell-db:
 # 🗄️ БАЗА ДАННЫХ И МИГРАЦИИ
 # ==============================================================================
 
-# Применение миграции: make db-migrate file=02_create_tables.sql
+# Применение миграции: make db-migrate file=001_init.sql
 db-migrate:
-	docker-compose exec -T db psql -U $(DB_USER) -d $(DB_NAME) -f /docker-entrypoint-initdb.d/$(file)
+	docker-compose exec -T db psql -U $(DB_USER) -d $(DB_NAME) -f /docker-entrypoint-initdb.d/migrations/$(file)
+
+# Применить сид (данные): make db-seed file=001_add-data.sql
+db-seed:
+	docker-compose exec -T db psql -U $(DB_USER) -d $(DB_NAME) -f /docker-entrypoint-initdb.d/seeds/$(file)
+
+# Применить все сиды
+db-seed-all:
+	@echo "$(GREEN)🌱 Применение всех сидов...$(NC)"
+	@for file in $$(ls seeds/*.sql 2>/dev/null | sort); do \
+		echo "Применяем сид: $$file"; \
+		docker-compose exec -T db psql -U $(DB_USER) -d $(DB_NAME) -f /docker-entrypoint-initdb.d/seeds/$$(basename $$file); \
+	done
+
+# Проверить статус сидов
+db-seed-status:
+	@echo "$(BLUE)📊 Статус сидов:$(NC)"
+	@docker-compose exec db psql -U $(DB_USER) -d $(DB_NAME) -c "SELECT 'Сиды не поддерживаются в автоматическом режиме' as status;"
 
 # Очистка
 clean:
