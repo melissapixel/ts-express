@@ -129,4 +129,56 @@ ON CONFLICT (book_id, author_id, role) DO NOTHING;
 INSERT INTO book_genre (book_id, genre_id) VALUES
     -- Хоббит и Властелин Колец
     ((SELECT id FROM book WHERE slug='the-hobbit-ru'), (SELECT id FROM genre_list WHERE slug='fantasy')),
-    ((SELECT id FROM book WHERE slug='the-hob
+    ((SELECT id FROM book WHERE slug='the-hobbit-ru'), (SELECT id FROM genre_list WHERE slug='adventure')),
+    ((SELECT id FROM book WHERE slug='the-hobbit-ru'), (SELECT id FROM genre_list WHERE slug='classic')),
+    
+    ((SELECT id FROM book WHERE slug='fellowship-ru'), (SELECT id FROM genre_list WHERE slug='fantasy')),
+    ((SELECT id FROM book WHERE slug='fellowship-ru'), (SELECT id FROM genre_list WHERE slug='adventure')),
+    ((SELECT id FROM book WHERE slug='fellowship-ru'), (SELECT id FROM genre_list WHERE slug='classic')),
+    
+    ((SELECT id FROM book WHERE slug='two-towers-ru'), (SELECT id FROM genre_list WHERE slug='fantasy')),
+    ((SELECT id FROM book WHERE slug='two-towers-ru'), (SELECT id FROM genre_list WHERE slug='adventure')),
+    
+    ((SELECT id FROM book WHERE slug='return-king-ru'), (SELECT id FROM genre_list WHERE slug='fantasy')),
+    ((SELECT id FROM book WHERE slug='return-king-ru'), (SELECT id FROM genre_list WHERE slug='adventure')),
+    
+    -- Ведьмак
+    ((SELECT id FROM book WHERE slug='last-wish-ru'), (SELECT id FROM genre_list WHERE slug='fantasy')),
+    ((SELECT id FROM book WHERE slug='last-wish-ru'), (SELECT id FROM genre_list WHERE slug='adventure')),
+    
+    ((SELECT id FROM book WHERE slug='sword-destiny-ru'), (SELECT id FROM genre_list WHERE slug='fantasy')),
+    ((SELECT id FROM book WHERE slug='sword-destiny-ru'), (SELECT id FROM genre_list WHERE slug='adventure')),
+    
+    ((SELECT id FROM book WHERE slug='blood-elves-ru'), (SELECT id FROM genre_list WHERE slug='fantasy')),
+    ((SELECT id FROM book WHERE slug='blood-elves-ru'), (SELECT id FROM genre_list WHERE slug='historical')),
+    
+    -- Азимов
+    ((SELECT id FROM book WHERE slug='foundation-ru'), (SELECT id FROM genre_list WHERE slug='scifi')),
+    ((SELECT id FROM book WHERE slug='foundation-ru'), (SELECT id FROM genre_list WHERE slug='classic')),
+    
+    ((SELECT id FROM book WHERE slug='foundation-empire-ru'), (SELECT id FROM genre_list WHERE slug='scifi')),
+    
+    -- Шерлок Холмс
+    ((SELECT id FROM book WHERE slug='study-in-scarlet-ru'), (SELECT id FROM genre_list WHERE slug='detective')),
+    ((SELECT id FROM book WHERE slug='study-in-scarlet-ru'), (SELECT id FROM genre_list WHERE slug='classic')),
+    
+    ((SELECT id FROM book WHERE slug='hound-baskervilles-ru'), (SELECT id FROM genre_list WHERE slug='detective')),
+    ((SELECT id FROM book WHERE slug='hound-baskervilles-ru'), (SELECT id FROM genre_list WHERE slug='horror')),
+    
+    -- Дюна
+    ((SELECT id FROM book WHERE slug='dune-ru'), (SELECT id FROM genre_list WHERE slug='scifi')),
+    ((SELECT id FROM book WHERE slug='dune-ru'), (SELECT id FROM genre_list WHERE slug='fantasy')),
+    ((SELECT id FROM book WHERE slug='dune-ru'), (SELECT id FROM genre_list WHERE slug='classic')),
+    
+    -- Ночной Дозор
+    ((SELECT id FROM book WHERE slug='night-watch-ru'), (SELECT id FROM genre_list WHERE slug='fantasy')),
+    ((SELECT id FROM book WHERE slug='night-watch-ru'), (SELECT id FROM genre_list WHERE slug='detective')),
+    
+    -- Норвежский лес
+    ((SELECT id FROM book WHERE slug='norwegian-wood-ru'), (SELECT id FROM genre_list WHERE slug='romance')),
+    ((SELECT id FROM book WHERE slug='norwegian-wood-ru'), (SELECT id FROM genre_list WHERE slug='classic')),
+    
+    -- Убийство в Восточном экспрессе
+    ((SELECT id FROM book WHERE slug='murder-orient-ru'), (SELECT id FROM genre_list WHERE slug='detective')),
+    ((SELECT id FROM book WHERE slug='murder-orient-ru'), (SELECT id FROM genre_list WHERE slug='classic'))
+ON CONFLICT (book_id, genre_id) DO NOTHING;
