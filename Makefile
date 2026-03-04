@@ -1,7 +1,15 @@
+# Проверяем наличие .env и экспортируем переменные для локальных команд
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
+
 # === Переменные ===
 APP_NAME = ts-express-app
 DOCKER_COMPOSE = docker-compose
 NPM = npm
+MIGRATIONS_DIR = migrations
+DB_CONTAINER = ts-postgres-db
 
 # === Цвета для вывода ===
 GREEN = \033[0;32m
@@ -11,7 +19,7 @@ NC = \033[0m # No Color
 
 # === Основные цели ===
 
-.PHONY: help install dev build start clean lint test up down logs restart shell db
+.PHONY: help install dev build start clean lint test up down logs restart shell db migrate migrate-all migrate-status init-db
 
 # Справка по командам
 help:
@@ -72,20 +80,42 @@ down-v:
 	@echo "$(YELLOW)⚠️ Остановка и удаление данных...$(NC)"
 	$(DOCKER_COMPOSE) down -v
 
-# Docker: Логи
+# ==============================================================================
+# 📋 ЛОГИРОВАНИЕ
+# ==============================================================================
+
 logs:
 	$(DOCKER_COMPOSE) logs -f
 
+logs-app:
+	$(DOCKER_COMPOSE) logs -f app
+
+logs-db:
+	$(DOCKER_COMPOSE) logs -f db
+
 # Docker: Рестарт
-restart: down up
+restart:
+	$(DOCKER_COMPOSE) down up
+
+# ==============================================================================
+# 🐚 ДОСТУП В КОНТЕЙНЕРЫ
+# ==============================================================================
 
 # Docker: Войти в консоль приложения
-shell:
+shell-app:
 	$(DOCKER_COMPOSE) exec app sh
 
 # Docker: Войти в консоль базы данных
-db:
-	$(DOCKER_COMPOSE) exec db psql -U postgres -d mydb
+shell-db:
+	$(DOCKER_COMPOSE) exec db psql -U $(DB_USER) -d $(DB_NAME)
+
+# ==============================================================================
+# 🗄️ БАЗА ДАННЫХ И МИГРАЦИИ
+# ==============================================================================
+
+# Применение миграции: make db-migrate file=02_create_tables.sql
+db-migrate:
+	docker-compose exec -T db psql -U $(DB_USER) -d $(DB_NAME) -f /docker-entrypoint-initdb.d/$(file)
 
 # Очистка
 clean:
